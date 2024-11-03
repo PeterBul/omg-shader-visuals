@@ -127,17 +127,32 @@ class BezierCurve {
   }
 
   getClosePointToMouse() {
-    for (const point of this._points) {
-      if (point.anchor.isCloseToMouse()) {
-        return point.anchor;
+    for (const bezierPoint of this._points) {
+      if (bezierPoint.anchor.isCloseToMouse()) {
+        return {
+          bezierPoint,
+          type: "anchor",
+          point: bezierPoint.anchor,
+          initialLocation: bezierPoint.anchor.clone(),
+        };
       }
 
-      if (point.controlIn.isCloseToMouse()) {
-        return point.controlIn;
+      if (bezierPoint.controlIn.isCloseToMouse()) {
+        return {
+          bezierPoint,
+          type: "controlIn",
+          point: bezierPoint.controlIn,
+          initialLocation: bezierPoint.controlIn.clone(),
+        };
       }
 
-      if (point.controlOut.isCloseToMouse()) {
-        return point.controlOut;
+      if (bezierPoint.controlOut.isCloseToMouse()) {
+        return {
+          bezierPoint,
+          type: "controlOut",
+          point: bezierPoint.controlOut,
+          initialLocation: bezierPoint.controlOut.clone(),
+        };
       }
     }
   }
@@ -219,10 +234,38 @@ class BezierCurve {
     this.draggedPoint = this.getClosePointToMouse();
   }
 
-  drag() {
+  /**
+   * Update the first control point while the user drags the mouse.
+   * @param {MouseEvent} e
+   */
+  drag(e) {
     if (this.draggedPoint) {
-      this.draggedPoint.x = mouseX;
-      this.draggedPoint.y = mouseY;
+      this.draggedPoint.point.x = e.altKey
+        ? this.draggedPoint.bezierPoint.anchor.x
+        : mouseX;
+      this.draggedPoint.point.y = e.shiftKey
+        ? this.draggedPoint.bezierPoint.anchor.y
+        : mouseY;
+    }
+  }
+
+  getDragDirection() {
+    if (
+      abs(this.getDragAngle()) > QUARTER_PI &&
+      abs(this.getDragAngle()) < 3 * QUARTER_PI
+    ) {
+      return "vertical";
+    } else {
+      return "horizontal";
+    }
+  }
+
+  getDragAngle() {
+    if (this.draggedPoint) {
+      return atan2(
+        mouseY - this.draggedPoint.initialLocation.y,
+        mouseX - this.draggedPoint.initialLocation.x
+      );
     }
   }
 

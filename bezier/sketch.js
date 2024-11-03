@@ -45,10 +45,13 @@ function mouseReleased(e) {
   bezierCurve.stopDragging();
 }
 
-// Update the first control point while the user drags the mouse.
-function mouseDragged() {
+/**
+ * Update the first control point while the user drags the mouse.
+ * @param {MouseEvent} e
+ */
+function mouseDragged(e) {
   dragged = true;
-  bezierCurve.drag();
+  bezierCurve.drag(e);
 }
 
 /**

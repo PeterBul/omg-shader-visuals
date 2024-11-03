@@ -25,6 +25,10 @@ class Point {
     return dist(this.x, this.y, x, y) < 20;
   }
 
+  clone() {
+    return new Point(this.x, this.y, this.type);
+  }
+
   isCloseToMouse() {
     return this.isCloseTo(mouseX, mouseY);
   }
