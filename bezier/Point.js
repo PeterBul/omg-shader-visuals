@@ -3,10 +3,12 @@ class Point {
    *
    * @param {number} x
    * @param {number} y
+   * @param {string} type
    */
-  constructor(x, y) {
+  constructor(x, y, type) {
     this.x = x;
     this.y = y;
+    this.type = type;
   }
 
   draw() {
