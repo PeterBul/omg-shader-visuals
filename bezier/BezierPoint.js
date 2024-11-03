@@ -1,3 +1,10 @@
+/**
+ * @typedef {Object} SerializedBezierPoint
+ * @property {SerializedPoint} anchor
+ * @property {SerializedPoint} controlIn
+ * @property {SerializedPoint} controlOut
+ */
+
 class BezierPoint {
   /**
    * @private

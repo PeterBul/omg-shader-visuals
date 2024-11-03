@@ -1,3 +1,9 @@
+/**
+ * @typedef {Object} SerializedPoint
+ * @property {number} x
+ * @property {number} y
+ */
+
 class Point {
   /**
    *
@@ -31,5 +37,12 @@ class Point {
 
   isCloseToMouse() {
     return this.isCloseTo(mouseX, mouseY);
+  }
+
+  serialize() {
+    return {
+      x: this.x,
+      y: this.y,
+    };
   }
 }

@@ -10,6 +10,79 @@ function setup() {
   );
 }
 
+const snake = [
+  {
+    anchor: {
+      x: 63.5,
+      y: 220.5,
+    },
+    controlIn: {
+      x: 220,
+      y: 220,
+    },
+    controlOut: {
+      x: 182.5,
+      y: 220.5,
+    },
+  },
+  {
+    anchor: {
+      x: 326.5,
+      y: 132.5,
+    },
+    controlIn: {
+      x: 245.5,
+      y: 132.5,
+    },
+    controlOut: {
+      x: 424.5,
+      y: 132.5,
+    },
+  },
+  {
+    anchor: {
+      x: 501.5,
+      y: 243.5,
+    },
+    controlIn: {
+      x: 501.5,
+      y: 203.5,
+    },
+    controlOut: {
+      x: 501.5,
+      y: 280.5,
+    },
+  },
+  {
+    anchor: {
+      x: 290.5,
+      y: 330.5,
+    },
+    controlIn: {
+      x: 384.5,
+      y: 330.5,
+    },
+    controlOut: {
+      x: 213.5,
+      y: 330.5,
+    },
+  },
+  {
+    anchor: {
+      x: 62.5,
+      y: 303.5,
+    },
+    controlIn: {
+      x: 184.5,
+      y: 303.5,
+    },
+    controlOut: {
+      x: 46.5,
+      y: 277.5,
+    },
+  },
+];
+
 const bezierCurve = new BezierCurve({
   anchorColor: new MyColor(0),
   anchorSize: 5,
@@ -19,9 +92,7 @@ const bezierCurve = new BezierCurve({
   curveWeight: 1,
 });
 
-const bezierPt1 = bezierCurve.add(200, 200);
-const bezierPt2 = bezierCurve.add(350, 300);
-const bezierPt3 = bezierCurve.add(400, 400);
+bezierCurve.fromSerialized(snake);
 
 function draw() {
   background(200);
@@ -68,5 +139,11 @@ function mouseClicked(e) {
     bezierCurve.remove(mouseX, mouseY);
   } else {
     bezierCurve.add(mouseX, mouseY);
+  }
+}
+
+function keyPressed() {
+  if (key === "s") {
+    console.log(bezierCurve.serialize());
   }
 }

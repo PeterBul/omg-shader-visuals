@@ -1,3 +1,9 @@
+/**
+ * @typedef {Object} CurveSlice
+ * @property {number} height - The height of the slice
+ * @property {number} center - The center of the slice
+ */
+
 class BezierCurve {
   /**
    * @type {BezierPoint[]}
@@ -162,6 +168,7 @@ class BezierCurve {
     this.drawAnchorPoints();
     this.drawControlPoints();
     this.drawAnchorLines();
+    this.drawXYMappings(1);
   }
 
   drawCurve() {
@@ -181,6 +188,41 @@ class BezierCurve {
         point2.anchor.x,
         point2.anchor.y
       );
+    }
+  }
+
+  /**
+   *
+   * @param {number} deltaX
+   * @returns
+   */
+  drawXYMappings(deltaX) {
+    for (let i = 0; i < this._points.length - 1; i++) {
+      const point1 = this._points[i];
+      const point2 = this._points[i + 1];
+      this.drawXYMappingsForSegment(deltaX, point1, point2);
+    }
+  }
+
+  getDirectionFromPoints(pointA, pointB) {
+    return pointA.anchor.x <= pointB.anchor.x ? "right" : "left";
+  }
+
+  /**
+   *
+   * @param {number} deltaX
+   * @returns
+   */
+  drawXYMappingsForSegment(deltaX, pointA, pointB) {
+    const direction = this.getDirectionFromPoints(pointA, pointB);
+    const directionCoefficient = direction === "right" ? 1 : -1;
+    let mappings = this.getXYMappings(deltaX, pointA, pointB, direction);
+
+    stroke(0, 255, 0);
+    strokeWeight(2);
+
+    for (let i = 0; i < mappings.length; i++) {
+      point(pointA.anchor.x + i * deltaX * directionCoefficient, mappings[i]);
     }
   }
 
@@ -247,6 +289,115 @@ class BezierCurve {
         ? this.draggedPoint.bezierPoint.anchor.y
         : mouseY;
     }
+  }
+
+  /**
+   *
+   * @param {number} deltaX
+   * @returns {CurveSlice[]}
+   */
+  getCurveSlices(deltaX) {
+    const start = this._points[0].anchor;
+    const end = this._points[this._points.length - 1].anchor;
+
+    const centerY = (start.y + end.y) / 2;
+    /**
+     * @type {CurveSlice[]}
+     */
+    const rightSlices = [];
+    /**
+     * @type {CurveSlice[]}
+     */
+    const leftSlices = [];
+
+    for (let i = 0; i < this._points.length - 1; i++) {
+      const point1 = this._points[i];
+      const point2 = this._points[i + 1];
+      const direction = this.getDirectionFromPoints(point1, point2);
+      const directionCoefficient = direction === "right" ? 1 : -1;
+      const mappings = this.getXYMappings(deltaX, point1, point2, direction);
+      for (let j = 0; j < mappings.length - 1; j++) {
+        const center = (mappings[j] + mappings[j + 1]) / 2;
+        const height = abs(mappings[j] - mappings[j + 1]);
+        if (direction === "right") {
+          rightSlices.push({ center, height });
+        } else {
+          leftSlices.push({ center, height });
+        }
+      }
+    }
+  }
+
+  /**
+   *
+   * @param {number} deltaX
+   * @param {BezierPoint} pointA
+   * @param {BezierPoint} pointB
+   * @param {'right' | 'left'} direction
+   */
+  getXYMappings(deltaX, pointA, pointB, direction) {
+    const comparator =
+      direction === "right" ? (a, b) => a >= b : (a, b) => a <= b;
+
+    const directionCoefficient = direction === "right" ? 1 : -1;
+    const deltaT = 0.001;
+    const x1 = pointA.anchor.x;
+    const y1 = pointA.anchor.y;
+    const mappings = [y1];
+    let targetX = x1 + deltaX * directionCoefficient;
+
+    for (let t = 0; t < 1; t += deltaT) {
+      const x = bezierPoint(
+        pointA.anchor.x,
+        pointA.controlOut.x,
+        pointB.controlIn.x,
+        pointB.anchor.x,
+        t
+      );
+      if (comparator(x, targetX)) {
+        mappings.push(
+          bezierPoint(
+            pointA.anchor.y,
+            pointA.controlOut.y,
+            pointB.controlIn.y,
+            pointB.anchor.y,
+            t
+          )
+        );
+        targetX += deltaX * directionCoefficient;
+      }
+    }
+
+    mappings.push(pointB.anchor.y);
+    return mappings;
+  }
+
+  /**
+   *
+   * @returns {SerializedBezierPoint[]}
+   */
+  serialize() {
+    return this._points.map((point) => {
+      return {
+        anchor: point.anchor.serialize(),
+        controlIn: point.controlIn.serialize(),
+        controlOut: point.controlOut.serialize(),
+      };
+    });
+  }
+
+  /**
+   * @param {SerializedBezierPoint[]} serializedData
+   */
+  fromSerialized(serializedData) {
+    this._points = serializedData.map((data) => {
+      const point = new BezierPoint(data.anchor.x, data.anchor.y);
+      point.controlIn.x = data.controlIn.x;
+      point.controlIn.y = data.controlIn.y;
+      point.controlOut.x = data.controlOut.x;
+      point.controlOut.y = data.controlOut.y;
+      return point;
+    });
   }
 
   getDragDirection() {
