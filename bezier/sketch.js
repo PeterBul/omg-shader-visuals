@@ -143,7 +143,9 @@ function mouseClicked(e) {
 }
 
 function keyPressed() {
-  if (key === "s") {
-    console.log(bezierCurve.serialize());
+  switch (key) {
+    case "s":
+      console.log(bezierCurve.serialize());
+      break;
   }
 }

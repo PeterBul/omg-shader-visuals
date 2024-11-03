@@ -169,6 +169,7 @@ class BezierCurve {
     this.drawControlPoints();
     this.drawAnchorLines();
     this.drawXYMappings(1);
+    this.drawCurveSlices(1);
   }
 
   drawCurve() {
@@ -300,33 +301,68 @@ class BezierCurve {
     const start = this._points[0].anchor;
     const end = this._points[this._points.length - 1].anchor;
 
-    const centerY = (start.y + end.y) / 2;
+    const baseCenterY = (start.y + end.y) / 2;
     /**
-     * @type {CurveSlice[]}
+     * @type {number[]}
      */
-    const rightSlices = [];
+    const rightMappings = [];
     /**
-     * @type {CurveSlice[]}
+     * @type {number[]}
      */
-    const leftSlices = [];
+    let leftMappings = [];
 
     for (let i = 0; i < this._points.length - 1; i++) {
       const point1 = this._points[i];
       const point2 = this._points[i + 1];
       const direction = this.getDirectionFromPoints(point1, point2);
-      const directionCoefficient = direction === "right" ? 1 : -1;
       const mappings = this.getXYMappings(deltaX, point1, point2, direction);
-      for (let j = 0; j < mappings.length - 1; j++) {
-        const center = (mappings[j] + mappings[j + 1]) / 2;
-        const height = abs(mappings[j] - mappings[j + 1]);
-        if (direction === "right") {
-          rightSlices.push({ center, height });
-        } else {
-          leftSlices.push({ center, height });
-        }
+      if (direction === "right") {
+        rightMappings.push(...mappings);
+      } else {
+        leftMappings.push(...mappings);
       }
     }
+
+    leftMappings = leftMappings.reverse();
+
+    /**
+     * @type {CurveSlice[]}
+     */
+    const slices = [];
+    for (let i = 0; i < rightMappings.length; i++) {
+      const y1 = rightMappings[i];
+      const y2 = leftMappings[i];
+      const center = (y1 + y2) / 2;
+      const height = abs(y1 - y2);
+      slices.push({ center, height });
+    }
+
+    return slices;
   }
+
+  drawCurveSlices(deltaX) {
+    const slices = this.getCurveSlices(deltaX);
+    stroke(0, 0, 255, 50);
+    const start = this._points[0].anchor;
+    for (let i = 0; i < slices.length; i++) {
+      const slice = slices[i];
+      const y1 = slice.center - slice.height / 2;
+      const y2 = slice.center + slice.height / 2;
+      const x = start.x + i * deltaX;
+      line(x, y1, x, y2);
+    }
+  }
+
+  // for (let j = 0; j < mappings.length - 1; j++) {
+  // const y1 = mappings[j] - baseCenterY;
+  // const y2 = mappings[j + 1] - baseCenterY;
+  // const center = (y1 + y2) / 2;
+  // const height = abs(y1 - y2);
+  // if (direction === "right") {
+  //   rightSlices.push({ center, height });
+  // } else {
+  //   leftSlices.push({ center, height });
+  // }
 
   /**
    *
