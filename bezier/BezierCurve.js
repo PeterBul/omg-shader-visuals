@@ -1,4 +1,8 @@
 /**
+ * @typedef {import('p5').Color} Color
+ */
+
+/**
  * @typedef {Object} CurveSlice
  * @property {number} height - The height of the slice
  * @property {number} center - The center of the slice
@@ -14,22 +18,22 @@ class BezierCurve {
   /**
    *
    * @param {object} props
-   * @param {MyColor} props.anchorColor
-   * @param {MyColor} props.controlColor
+   * @param {Color} props.anchorColor
+   * @param {Color} props.controlColor
    * @param {number} props.anchorSize
    * @param {number} props.controlSize
-   * @param {MyColor} props.curveColor
+   * @param {Color} props.curveColor
    * @param {number} props.curveWeight
    * @returns
    */
   constructor(props) {
     /**
-     * @type {MyColor}
+     * @type {Color}
      * @private
      */
     this._anchorColor = props.anchorColor;
     /**
-     * @type {MyColor}
+     * @type {Color}
      * @private
      */
     this._controlColor = props.controlColor;
@@ -44,7 +48,7 @@ class BezierCurve {
      */
     this._controlSize = props.controlSize;
     /**
-     * @type {MyColor}
+     * @type {Color}
      * @private
      */
     this._curveColor = props.curveColor;
@@ -174,7 +178,7 @@ class BezierCurve {
 
   drawCurve() {
     noFill();
-    stroke(this._curveColor.r, this._curveColor.g, this._curveColor.b);
+    stroke(0);
     strokeWeight(this._curveWeight);
     for (let i = 0; i < this._points.length - 1; i++) {
       const point1 = this._points[i];
@@ -228,7 +232,7 @@ class BezierCurve {
   }
 
   drawAnchorPoints() {
-    stroke(this._anchorColor.r, this._anchorColor.g, this._anchorColor.b);
+    stroke(this._anchorColor);
     strokeWeight(this._anchorSize);
     for (const point of this._points) {
       point.drawAnchor();
@@ -236,7 +240,7 @@ class BezierCurve {
   }
 
   drawControlPoints() {
-    stroke(this._controlColor.r, this._controlColor.g, this._controlColor.b);
+    stroke(this._controlColor);
     strokeWeight(this._controlSize);
     for (let i = 0; i < this._points.length; i++) {
       const point = this._points[i];
@@ -250,7 +254,7 @@ class BezierCurve {
   }
 
   drawAnchorLines() {
-    stroke(this._controlColor.r, this._controlColor.g, this._controlColor.b);
+    stroke(this._controlColor);
     strokeWeight(this._curveWeight);
     for (let i = 0; i < this._points.length; i++) {
       const point = this._points[i];

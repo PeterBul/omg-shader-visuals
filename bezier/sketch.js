@@ -1,6 +1,10 @@
 // Click the mouse near the red dot in the top-left corner
 // and drag to change the curve's shape.
 let isChanging = false;
+/**
+ * @type {BezierCurve}
+ */
+let bezierCurve;
 
 function setup() {
   createCanvas(600, 600);
@@ -8,6 +12,16 @@ function setup() {
   describe(
     "A gray square with three curves. A black s-curve has two straight, red lines that extend from its ends. The endpoints of all the curves are marked with dots."
   );
+  bezierCurve = new BezierCurve({
+    anchorColor: color(0),
+    anchorSize: 5,
+    controlColor: color(255, 0, 0),
+    controlSize: 5,
+    curveColor: color(0),
+    curveWeight: 1,
+  });
+
+  bezierCurve.fromSerialized(snake);
 }
 
 const snake = [
@@ -82,17 +96,6 @@ const snake = [
     },
   },
 ];
-
-const bezierCurve = new BezierCurve({
-  anchorColor: new MyColor(0),
-  anchorSize: 5,
-  controlColor: new MyColor(255, 0, 0),
-  controlSize: 5,
-  curveColor: new MyColor(0),
-  curveWeight: 1,
-});
-
-bezierCurve.fromSerialized(snake);
 
 function draw() {
   background(200);
