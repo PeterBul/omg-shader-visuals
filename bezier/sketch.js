@@ -4,15 +4,15 @@ let isChanging = false;
 /**
  * @type {BezierCurve}
  */
-let bezierCurve;
+let snakeCurve;
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(1920, 1080);
 
   describe(
     "A gray square with three curves. A black s-curve has two straight, red lines that extend from its ends. The endpoints of all the curves are marked with dots."
   );
-  bezierCurve = new BezierCurve({
+  snakeCurve = new BezierCurve({
     anchorColor: color(0),
     anchorSize: 5,
     controlColor: color(255, 0, 0),
@@ -21,78 +21,78 @@ function setup() {
     curveWeight: 1,
   });
 
-  bezierCurve.fromSerialized(snake);
+  snakeCurve.fromSerialized(snake).translate(220, 400).scale(1.5);
 }
 
 const snake = [
   {
     anchor: {
-      x: 63.5,
-      y: 220.5,
+      x: 0,
+      y: -83,
     },
     controlIn: {
-      x: 220,
-      y: 220,
+      x: 313,
+      y: -84,
     },
     controlOut: {
-      x: 182.5,
-      y: 220.5,
+      x: 238,
+      y: -83,
     },
   },
   {
     anchor: {
-      x: 326.5,
-      y: 132.5,
+      x: 526,
+      y: -259,
     },
     controlIn: {
-      x: 245.5,
-      y: 132.5,
+      x: 364,
+      y: -259,
     },
     controlOut: {
-      x: 424.5,
-      y: 132.5,
+      x: 722,
+      y: -259,
     },
   },
   {
     anchor: {
-      x: 501.5,
-      y: 243.5,
+      x: 876,
+      y: -37,
     },
     controlIn: {
-      x: 501.5,
-      y: 203.5,
+      x: 876,
+      y: -117,
     },
     controlOut: {
-      x: 501.5,
-      y: 280.5,
+      x: 876,
+      y: 37,
     },
   },
   {
     anchor: {
-      x: 290.5,
-      y: 330.5,
+      x: 454,
+      y: 137,
     },
     controlIn: {
-      x: 384.5,
-      y: 330.5,
+      x: 642,
+      y: 137,
     },
     controlOut: {
-      x: 213.5,
-      y: 330.5,
+      x: 300,
+      y: 137,
     },
   },
   {
     anchor: {
-      x: 62.5,
-      y: 303.5,
+      x: -2,
+      y: 83,
     },
     controlIn: {
-      x: 184.5,
-      y: 303.5,
+      x: 242,
+      y: 83,
     },
     controlOut: {
-      x: 46.5,
-      y: 277.5,
+      x: -34,
+      y: 31,
     },
   },
 ];
@@ -100,14 +100,14 @@ const snake = [
 function draw() {
   background(200);
 
-  bezierCurve.draw();
+  snakeCurve.draw();
 }
 
 let dragged = false;
 // Start changing the first control point if the user clicks near it.
 function mousePressed() {
   dragged = false;
-  bezierCurve.startDragging();
+  snakeCurve.startDragging();
 }
 
 // Stop changing the first control point when the user releases the mouse.
@@ -116,7 +116,7 @@ function mousePressed() {
  * @param {PointerEvent} e
  */
 function mouseReleased(e) {
-  bezierCurve.stopDragging();
+  snakeCurve.stopDragging();
 }
 
 /**
@@ -125,7 +125,7 @@ function mouseReleased(e) {
  */
 function mouseDragged(e) {
   dragged = true;
-  bezierCurve.drag(e);
+  snakeCurve.drag(e);
 }
 
 /**
@@ -139,16 +139,16 @@ function mouseClicked(e) {
   }
   // If shift is pressed, delete
   if (e.shiftKey) {
-    bezierCurve.remove(mouseX, mouseY);
+    snakeCurve.remove(mouseX, mouseY);
   } else {
-    bezierCurve.add(mouseX, mouseY);
+    snakeCurve.add(mouseX, mouseY);
   }
 }
 
 function keyPressed() {
   switch (key) {
     case "s":
-      console.log(bezierCurve.serialize());
+      console.log(snakeCurve.serialize());
       break;
   }
 }

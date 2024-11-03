@@ -86,6 +86,74 @@ class BezierCurve {
 
   /**
    *
+   * @param {number} scaleFactor
+   * @returns
+   */
+  scale(scaleFactor) {
+    this._points = this._points.map((point) => {
+      point.anchor.x *= scaleFactor;
+      point.anchor.y *= scaleFactor;
+      point.controlIn.x *= scaleFactor;
+      point.controlIn.y *= scaleFactor;
+      point.controlOut.x *= scaleFactor;
+      point.controlOut.y *= scaleFactor;
+      return point;
+    });
+    return this;
+  }
+
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @returns
+   */
+  translate(x, y = x) {
+    console.log("translate", x, y);
+    this._points = this._points.map((point) => {
+      point.anchor.x += x;
+      point.anchor.y += y;
+      point.controlIn.x += x;
+      point.controlIn.y += y;
+      point.controlOut.x += x;
+      point.controlOut.y += y;
+      return point;
+    });
+    return this;
+  }
+
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @returns
+   */
+  translateTo(x = 0, y = 0) {
+    const start = this._points[0].anchor;
+    const end = this._points[this._points.length - 1].anchor;
+
+    const baseCenterY = (start.y + end.y) / 2;
+
+    this.translate(-start.x + x, -baseCenterY + y);
+    return this;
+  }
+
+  /**
+   *
+   * @param {number} entryHeight
+   * @returns
+   */
+  scaleToEntryHeight(entryHeight) {
+    const start = this._points[0].anchor;
+    const end = this._points[this._points.length - 1].anchor;
+    const height = abs(start.y - end.y);
+    const scaleFactor = entryHeight / height;
+    this.scale(scaleFactor);
+    return this;
+  }
+
+  /**
+   *
    * @param {number} x
    * @param {number} y
    * @param {number} controlX
@@ -302,10 +370,6 @@ class BezierCurve {
    * @returns {CurveSlice[]}
    */
   getCurveSlices(deltaX) {
-    const start = this._points[0].anchor;
-    const end = this._points[this._points.length - 1].anchor;
-
-    const baseCenterY = (start.y + end.y) / 2;
     /**
      * @type {number[]}
      */
@@ -438,6 +502,7 @@ class BezierCurve {
       point.controlOut.y = data.controlOut.y;
       return point;
     });
+    return this;
   }
 
   getDragDirection() {
