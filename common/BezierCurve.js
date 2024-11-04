@@ -104,6 +104,36 @@ class BezierCurve {
 
   /**
    *
+   * @param {number} scaleFactor
+   * @returns
+   */
+  scaleX(scaleFactor) {
+    this._points = this._points.map((point) => {
+      point.anchor.x *= scaleFactor;
+      point.controlIn.x *= scaleFactor;
+      point.controlOut.x *= scaleFactor;
+      return point;
+    });
+    return this;
+  }
+
+  /**
+   *
+   * @param {number} scaleFactor
+   * @returns
+   */
+  scaleY(scaleFactor) {
+    this._points = this._points.map((point) => {
+      point.anchor.y *= scaleFactor;
+      point.controlIn.y *= scaleFactor;
+      point.controlOut.y *= scaleFactor;
+      return point;
+    });
+    return this;
+  }
+
+  /**
+   *
    * @param {number} x
    * @param {number} y
    * @returns
