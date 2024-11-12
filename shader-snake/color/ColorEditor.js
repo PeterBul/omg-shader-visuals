@@ -64,7 +64,7 @@ class ColorEditor {
       const hex = this.rgbToHex(color);
       this.colorPicker = createColorPicker(hex);
       if (color.length > 3) {
-        this.alphaSlider.value(color[3] * 255);
+        this.alphaSlider.value(color[3]);
       }
     }
     this.colorPicker.position(this.posX, this.posY);
