@@ -8,6 +8,9 @@ uniform mat4 uProjectionMatrix;
 uniform mat4 uModelViewMatrix;
 
 uniform float uMillis;
+uniform float uSphereRadius;
+uniform float uCylinderRadius;
+uniform float uEyeYOffset;
 
 out vec2 texPos;
 out vec3 fragPos;
@@ -58,49 +61,8 @@ void main() {
     // Normalize the position to be within the range of 0.0 to 1.0
     float t = (aPosition.y + 0.5) / len;  // Normalize y from 0 to 1
 
-    // Apply a quadratic function for smooth tapering
-    float radius = acosh(0.2 * t + 1.) * 1.;
-    modifiedPos.x *= radius; // Apply radius to x-axis
-    modifiedPos.z *= radius; // Apply radius to z-axis
-
-    float headNormT = (t - 0.9) * 10.;
-    // Draw a head at the top of the snake
-    float headRadiusX = halfCircle(t - 0.9, 0.05) * 12.;
-    float headRadiusZ = halfCircle(t - 0.9, 0.05) * 12.;
-    // float headRadius = 1.;
-    // float headRadius = linear(t - 0.9, 25., 0.0);
-    if (t > 0.9) {
-        float oldX = modifiedPos.x;
-        float oldZ = modifiedPos.z;
-        modifiedPos.x *= 1. + headRadiusX;
-        modifiedPos.z *= 1. + headRadiusZ;
-        modifiedPos.x -= mix(0., oldX, headNormT);
-        modifiedPos.z -= mix(0., oldZ, headNormT);
-        // modifiedPos.y -= 0.02;
-        // if (modifiedPos.z < 0.0) {
-        //     modifiedPos.z -= sin(modifiedPos.z) * headRadius;
-        // } else {
-        //     modifiedPos.z += sin(modifiedPos.z) * headRadius;
-        // }
-        // if (modifiedPos.x < 0.0) {
-        //     modifiedPos.x -= sin(modifiedPos.x) * headRadius;
-        // } else {
-        //     modifiedPos.x += sin(modifiedPos.x) * headRadius;
-        // }
-        // modifiedPos.x *= 1. + headRadius;
-        // modifiedPos.z *= 1. + headRadius;
-    }
-    if (t == 1.0) {
-        modifiedPos.x = 0.0;
-        modifiedPos.z = 0.0;
-    }
-    // modifiedPos.x *= 1. + headRadius * step(0.9, t); // Step makes sure the radius is only applied when t > 0.9
-    // modifiedPos.z *= 1. + headRadius * step(0.9, t);
-    // modifiedPos.x *= 1. + headRadius * step(0.9, t); // Step makes sure the radius is only applied when t > 0.9
-    // modifiedPos.z *= 1. + headRadius * step(0.9, t);
-
     // Apply the displacement along the x-axis based on the y position of the vertex
-    float snakeMovementDisplacement = waveAmplitude * sin(waveFrequency * aPosition.y + uMillis / 1000.0);
+    float snakeMovementDisplacement = waveAmplitude * uCylinderRadius / uSphereRadius * sin(waveFrequency * (0.5 - uEyeYOffset * 0.002) + uMillis / 1000.0);
     modifiedPos.x += snakeMovementDisplacement;
 
     // Pass the modified position to the fragment shader
