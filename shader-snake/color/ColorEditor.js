@@ -108,4 +108,49 @@ class ColorEditor {
       rgb[2]
     )}`;
   }
+
+  /**
+   *
+   * @param {*} r
+   * @param {*} g
+   * @param {*} b
+   * @returns
+   */
+  rgbToHsl(r, g, b) {
+    // Normalize RGB values to the range 0-1
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+    // Find the min and max RGB values
+    let max = Math.max(r, g, b);
+    let min = Math.min(r, g, b);
+    let delta = max - min;
+
+    // Calculate Lightness
+    let l = (max + min) / 2;
+
+    let h, s;
+
+    if (delta === 0) {
+      // If there is no color difference (grayscale)
+      h = 0;
+      s = 0;
+    } else {
+      // Calculate Saturation
+      s = l < 0.5 ? delta / (max + min) : delta / (2 - max - min);
+
+      // Calculate Hue
+      if (max === r) {
+        h = ((g - b) / delta + (g < b ? 6 : 0)) / 6;
+      } else if (max === g) {
+        h = ((b - r) / delta + 2) / 6;
+      } else {
+        h = ((r - g) / delta + 4) / 6;
+      }
+    }
+
+    // Return H, S, L as values in range [0, 1]
+    return { h, s, l };
+  }
 }

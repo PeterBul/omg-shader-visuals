@@ -39,10 +39,19 @@ class ColorManager {
   yOffsetPickerPosition = 30;
 
   /**
+   * @private
+   * @type {AudioManager}
+   */
+  audioManager;
+
+  /**
    *
    * @param {number[][]} levels
+   * @param {AudioManager} audioManager
    */
-  constructor(levels) {
+  constructor(levels, audioManager) {
+    this.audioManager = audioManager;
+
     this.tlColorEditor = new ColorEditor("#000000");
     this.trColorEditor = new ColorEditor("#ffffff");
     this.blColorEditor = new ColorEditor("#00ff00");
@@ -139,9 +148,12 @@ class ColorManager {
    * @param {Shader} shader
    */
   setShaderUniforms(shader) {
-    shader.setUniform("uTopLeftColor", this.tl);
-    shader.setUniform("uTopRightColor", this.tr);
-    shader.setUniform("uBottomLeftColor", this.bl);
-    shader.setUniform("uBottomRightColor", this.br);
+    // shader.setUniform("uTopLeftColor", this.tl);
+    const v = [this.audioManager.bassEnergy, 0, 0, 1];
+    // console.log(v);
+    shader.setUniform("uTopLeftColor", v);
+    shader.setUniform("uTopRightColor", v);
+    shader.setUniform("uBottomLeftColor", v);
+    shader.setUniform("uBottomRightColor", v);
   }
 }

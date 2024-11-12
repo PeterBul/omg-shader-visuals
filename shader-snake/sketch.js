@@ -38,10 +38,17 @@ function preload() {
   // snakeHead = loadModel("../models/snake-head-2.obj", true);
 }
 
+/**
+ * @type {AudioManager}
+ */
+let audioManager;
+
 function setup() {
   createCanvas(1920, 1280, WEBGL);
 
-  colorManager = new ColorManager(lightBlue1);
+  audioManager = new AudioManager();
+
+  colorManager = new ColorManager(lightBlue1, audioManager);
 
   snakeHeadProfileCurve = new BezierCurve({
     anchorColor: color(0),
@@ -79,6 +86,7 @@ function setup() {
 }
 
 function draw() {
+  audioManager.draw();
   clear();
   rotateX(HALF_PI - 0.5);
   background(0);
@@ -117,4 +125,3 @@ function draw() {
   // exampleShader.setUniform("uHeight", cylinderHeight);
   // shader(exampleShader);
 }
-
