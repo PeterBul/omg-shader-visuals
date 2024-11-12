@@ -1,4 +1,4 @@
-class ColorEditor {
+class MyColorEditor {
   /**
    * @private
    */

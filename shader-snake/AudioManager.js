@@ -1,4 +1,4 @@
-class AudioManager {
+class MyAudioManager {
   /**
    * @private
    */

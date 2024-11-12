@@ -28,7 +28,7 @@ let snakeHeadProfileSlices;
 let snakeHeadTopSlices;
 
 /**
- * @type {ColorManager}
+ * @type {MyColorManager}
  */
 let colorManager;
 
@@ -39,48 +39,16 @@ function preload() {
 }
 
 /**
- * @type {AudioManager}
+ * @type {MyAudioManager}
  */
 let audioManager;
 
 function setup() {
   createCanvas(1920, 1280, WEBGL);
 
-  audioManager = new AudioManager();
+  audioManager = new MyAudioManager();
 
-  colorManager = new ColorManager(lightBlue1, audioManager);
-
-  snakeHeadProfileCurve = new BezierCurve({
-    anchorColor: color(0),
-    anchorSize: 5,
-    controlColor: color(255, 0, 0),
-    controlSize: 5,
-    curveColor: color(0),
-    curveWeight: 1,
-  });
-
-  snakeHeadTopCurve = new BezierCurve({
-    anchorColor: color(0),
-    anchorSize: 5,
-    controlColor: color(255, 0, 0),
-    controlSize: 5,
-    curveColor: color(0),
-    curveWeight: 1,
-  });
-
-  snakeHeadProfileCurve.fromSerialized(snakeProfile2);
-  snakeHeadTopCurve.fromSerialized(greenViperTop);
-
-  const scaleX = 0.09;
-  const scaleY = 0.09;
-  const scaleXTop = 0.87;
-  snakeHeadProfileCurve.scaleX(scaleX).scaleY(scaleY).translateTo();
-  snakeHeadTopCurve
-    .scaleX(scaleX * scaleXTop)
-    .scaleY(scaleY)
-    .translateTo();
-  snakeHeadProfileSlices = snakeHeadProfileCurve.getCurveSlices(0.4);
-  snakeHeadTopSlices = snakeHeadTopCurve.getCurveSlices(0.4);
+  colorManager = new MyColorManager(lightBlue1, audioManager);
 
   noStroke();
 }

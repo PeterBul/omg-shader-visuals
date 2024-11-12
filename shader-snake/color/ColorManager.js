@@ -5,28 +5,28 @@ const lightBlue1 = [
   [167, 10, 178, 54],
 ];
 
-class ColorManager {
+class MyColorManager {
   /**
    * @private
-   * @type {ColorEditor}
+   * @type {MyColorEditor}
    */
   tlColorEditor;
 
   /**
    * @private
-   * @type {ColorEditor}
+   * @type {MyColorEditor}
    */
   trColorEditor;
 
   /**
    * @private
-   * @type {ColorEditor}
+   * @type {MyColorEditor}
    */
   blColorEditor;
 
   /**
    * @private
-   * @type {ColorEditor}
+   * @type {MyColorEditor}
    */
   brColorEditor;
 
@@ -40,22 +40,22 @@ class ColorManager {
 
   /**
    * @private
-   * @type {AudioManager}
+   * @type {MyAudioManager}
    */
   audioManager;
 
   /**
    *
    * @param {number[][]} levels
-   * @param {AudioManager} audioManager
+   * @param {MyAudioManager} audioManager
    */
   constructor(levels, audioManager) {
     this.audioManager = audioManager;
 
-    this.tlColorEditor = new ColorEditor("#000000");
-    this.trColorEditor = new ColorEditor("#ffffff");
-    this.blColorEditor = new ColorEditor("#00ff00");
-    this.brColorEditor = new ColorEditor("#ff00ff");
+    this.tlColorEditor = new MyColorEditor("#000000");
+    this.trColorEditor = new MyColorEditor("#ffffff");
+    this.blColorEditor = new MyColorEditor("#00ff00");
+    this.brColorEditor = new MyColorEditor("#ff00ff");
 
     if (levels) {
       this.tl = levels[0];
