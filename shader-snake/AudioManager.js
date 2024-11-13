@@ -23,7 +23,7 @@ class AudioManager {
 
   audioSetup() {
     if (this.initialized) {
-      return;
+      return 0;
     }
     let audioContext = getAudioContext();
     if (audioContext.state === "suspended") {
@@ -39,105 +39,105 @@ class AudioManager {
 
   get spectrum() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return fft.analyze();
   }
 
   get spectrumNormalized() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return this.spectrum.map((val) => val / 255);
   }
 
   get centroid() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return fft.getCentroid();
   }
 
   get centroidNormalized() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return this.centroid / 5000;
   }
 
   get bassEnergy() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return fft.getEnergy("bass");
   }
 
   get bassEnergyNormalized() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return this.bassEnergy / 255;
   }
 
   get lowMidEnergy() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return fft.getEnergy("lowMid");
   }
 
   get lowMidEnergyNormalized() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return this.lowMidEnergy / 255;
   }
 
   get midEnergy() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return fft.getEnergy("mid");
   }
 
   get midEnergyNormalized() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return this.midEnergy / 255;
   }
 
   get highMidEnergy() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return fft.getEnergy("highMid");
   }
 
   get highMidEnergyNormalized() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return this.highMidEnergy / 255;
   }
 
   get trebleEnergy() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return fft.getEnergy("treble");
   }
 
   get trebleEnergyNormalized() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return this.trebleEnergy / 100;
   }
 
   get all() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return {
       avgBassEnergy: this.avgBassEnergy,
@@ -233,7 +233,7 @@ class AudioManager {
 
   get avgBassEnergy() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return (
       this.bassEnergyHistory.reduce((acc, val) => acc + val, 0) /
@@ -243,7 +243,7 @@ class AudioManager {
 
   get avgTrebleEnergy() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return (
       this.trebleEnergyHistory.reduce((acc, val) => acc + val, 0) /
@@ -253,14 +253,14 @@ class AudioManager {
 
   get avgBassEnergyNormalized() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return this.avgBassEnergy / 255;
   }
 
   get avgTrebleEnergyNormalized() {
     if (!this.initialized) {
-      return;
+      return 0;
     }
     return this.avgTrebleEnergy / 100;
   }
