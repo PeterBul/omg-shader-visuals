@@ -8,25 +8,25 @@ const lightBlue1 = [
 class ColorManager {
   /**
    * @private
-   * @type {ColorEditor}
+   * @type {MyColorEditor}
    */
   tlColorEditor;
 
   /**
    * @private
-   * @type {ColorEditor}
+   * @type {MyColorEditor}
    */
   trColorEditor;
 
   /**
    * @private
-   * @type {ColorEditor}
+   * @type {MyColorEditor}
    */
   blColorEditor;
 
   /**
    * @private
-   * @type {ColorEditor}
+   * @type {MyColorEditor}
    */
   brColorEditor;
 
@@ -39,14 +39,23 @@ class ColorManager {
   yOffsetPickerPosition = 30;
 
   /**
+   * @private
+   * @type {AudioManager}
+   */
+  audioManager;
+
+  /**
    *
    * @param {number[][]} levels
+   * @param {AudioManager} audioManager
    */
-  constructor(levels) {
-    this.tlColorEditor = new ColorEditor("#000000");
-    this.trColorEditor = new ColorEditor("#ffffff");
-    this.blColorEditor = new ColorEditor("#00ff00");
-    this.brColorEditor = new ColorEditor("#ff00ff");
+  constructor(levels, audioManager) {
+    this.audioManager = audioManager;
+
+    this.tlColorEditor = new MyColorEditor("#000000");
+    this.trColorEditor = new MyColorEditor("#ffffff");
+    this.blColorEditor = new MyColorEditor("#00ff00");
+    this.brColorEditor = new MyColorEditor("#ff00ff");
 
     if (levels) {
       this.tl = levels[0];
@@ -139,9 +148,24 @@ class ColorManager {
    * @param {Shader} shader
    */
   setShaderUniforms(shader) {
-    shader.setUniform("uTopLeftColor", this.tl);
+    // shader.setUniform("uTopLeftColor", this.tl);
+    const tl = [
+      this.audioManager.avgBassEnergyNormalized,
+      this.audioManager.avgBassEnergyNormalized,
+      0,
+      0.5,
+    ];
+
+    const bl = [
+      0,
+      this.audioManager.lowMidEnergyNormalized,
+      this.audioManager.lowMidEnergyNormalized,
+      0.5,
+    ];
+    // console.log(v);
+    shader.setUniform("uTopLeftColor", tl);
     shader.setUniform("uTopRightColor", this.tr);
-    shader.setUniform("uBottomLeftColor", this.bl);
+    shader.setUniform("uBottomLeftColor", bl);
     shader.setUniform("uBottomRightColor", this.br);
   }
 }
