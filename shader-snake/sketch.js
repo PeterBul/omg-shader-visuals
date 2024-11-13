@@ -55,7 +55,6 @@ function setup() {
 
 function draw() {
   audioManager.audioDraw();
-  console.log(audioManager.toStringNormalized);
   clear();
   rotateX(HALF_PI - 0.5);
   background(0);
@@ -96,6 +95,5 @@ function draw() {
 }
 
 function mouseClicked() {
-  console.log("mouseClicked");
   audioManager.audioSetup();
 }
