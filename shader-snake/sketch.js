@@ -28,7 +28,7 @@ let snakeHeadProfileSlices;
 let snakeHeadTopSlices;
 
 /**
- * @type {MyColorManager}
+ * @type {ColorManager}
  */
 let colorManager;
 
@@ -48,18 +48,18 @@ function setup() {
 
   audioManager = new AudioManager();
 
-  colorManager = new MyColorManager(lightBlue1, audioManager);
+  colorManager = new ColorManager(lightBlue1, audioManager);
 
   noStroke();
 }
 
 function draw() {
   audioManager.audioDraw();
-  console.log("bass", audioManager.getBass());
+  console.log(audioManager.toStringNormalized);
   clear();
   rotateX(HALF_PI - 0.5);
   background(0);
-  // rect(0, 0, width, height);
+
   shader(snakeShader);
   const cylinderRadius = 50;
   const cylinderHeight = 500;
@@ -69,21 +69,21 @@ function draw() {
   colorManager.setShaderUniforms(snakeShader);
   cylinder(cylinderRadius, cylinderHeight, 150, 1000);
 
-  const sphereRadius = 2;
-  const eyeYOffset = 20;
-  translate(-19, 250 - eyeYOffset, 20);
-  shader(eyesShader);
-  eyesShader.setUniform("uMillis", millis());
-  eyesShader.setUniform("uCylinderRadius", cylinderRadius);
-  eyesShader.setUniform("uSphereRadius", sphereRadius);
-  eyesShader.setUniform("uHeight", cylinderHeight);
-  eyesShader.setUniform("uEyeYOffset", eyeYOffset);
-  colorManager.setShaderUniforms(eyesShader);
+  // const sphereRadius = 2;
+  // const eyeYOffset = 20;
+  // translate(-19, 250 - eyeYOffset, 20);
+  // shader(eyesShader);
+  // eyesShader.setUniform("uMillis", millis());
+  // eyesShader.setUniform("uCylinderRadius", cylinderRadius);
+  // eyesShader.setUniform("uSphereRadius", sphereRadius);
+  // eyesShader.setUniform("uHeight", cylinderHeight);
+  // eyesShader.setUniform("uEyeYOffset", eyeYOffset);
+  // colorManager.setShaderUniforms(eyesShader);
   // sphere(sphereRadius);
 
   orbitControl();
-  const s = 0.9;
-  resetShader();
+  // const s = 0.9;
+  // resetShader();
   // scale([0.5 * s, 0.5 * s, 2 * s]);
   // rotateX(HALF_PI);
   // rotateY(PI);

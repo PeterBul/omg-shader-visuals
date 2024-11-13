@@ -1,21 +1,30 @@
 let audioIn;
 let fft;
 let mic;
-class AudioManager {
+let initialized = false;
+class TestAudioManager {
   audioSetup() {
+    if (initialized) {
+      return;
+    }
+    let audioContext = getAudioContext();
+    if (audioContext.state === "suspended") {
+      audioContext.resume();
+    }
     audioIn = new p5.AudioIn();
     audioIn.getSources(gotSources);
     fft = new p5.FFT();
-    fft.setInput(audioIn);
     console.log("Audio initialized");
-    this.initialized = true;
+    initialized = true;
   }
 
   audioDraw() {
-    if (!this.initialized) {
+    if (!initialized) {
       return;
     }
+
     let spectrum = fft.analyze();
+
     beginShape();
     for (let i = 0; i < spectrum.length; i++) {
       vertex(i, map(spectrum[i], 0, 255, height, 0));
@@ -45,3 +54,8 @@ function gotSources(deviceList) {
     console.log("Selected source:", selectedSource.label);
   }
 }
+
+window.onbeforeunload = function () {
+  let audioContext = getAudioContext();
+  audioContext.close();
+};

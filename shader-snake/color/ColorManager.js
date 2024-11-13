@@ -5,7 +5,7 @@ const lightBlue1 = [
   [167, 10, 178, 54],
 ];
 
-class MyColorManager {
+class ColorManager {
   /**
    * @private
    * @type {MyColorEditor}
@@ -149,11 +149,23 @@ class MyColorManager {
    */
   setShaderUniforms(shader) {
     // shader.setUniform("uTopLeftColor", this.tl);
-    const v = [this.audioManager.getBass(), 0, 0, 0.5];
+    const tl = [
+      this.audioManager.avgBassEnergyNormalized,
+      this.audioManager.avgBassEnergyNormalized,
+      0,
+      0.5,
+    ];
+
+    const bl = [
+      0,
+      this.audioManager.lowMidEnergyNormalized,
+      this.audioManager.lowMidEnergyNormalized,
+      0.5,
+    ];
     // console.log(v);
-    shader.setUniform("uTopLeftColor", v);
-    shader.setUniform("uTopRightColor", v);
-    shader.setUniform("uBottomLeftColor", v);
-    shader.setUniform("uBottomRightColor", v);
+    shader.setUniform("uTopLeftColor", tl);
+    shader.setUniform("uTopRightColor", this.tr);
+    shader.setUniform("uBottomLeftColor", bl);
+    shader.setUniform("uBottomRightColor", this.br);
   }
 }
