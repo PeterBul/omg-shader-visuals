@@ -65,7 +65,7 @@ void main() {
 
     float headNormT = (t - 0.9) * 10.;
     // Draw a head at the top of the snake
-    float headRadiusX = halfCircle(t - 0.9, 0.05) * 12.;
+    float headRadiusX = halfCircle(t - 0.9, 0.05) * 25.;
     float headRadiusZ = halfCircle(t - 0.9, 0.05) * 12.;
 
     if (t > 0.9) {
