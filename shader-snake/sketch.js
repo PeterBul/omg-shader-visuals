@@ -39,14 +39,14 @@ function preload() {
 }
 
 /**
- * @type {MyAudioManager}
+ * @type {AudioManager}
  */
 let audioManager;
 
 function setup() {
   createCanvas(1920, 1280, WEBGL);
 
-  audioManager = new MyAudioManager();
+  audioManager = new AudioManager();
 
   colorManager = new MyColorManager(lightBlue1, audioManager);
 
@@ -54,7 +54,8 @@ function setup() {
 }
 
 function draw() {
-  audioManager.draw();
+  audioManager.audioDraw();
+  console.log("bass", audioManager.getBass());
   clear();
   rotateX(HALF_PI - 0.5);
   background(0);
@@ -92,4 +93,9 @@ function draw() {
   // exampleShader.setUniform("uRadius", cylinderRadius);
   // exampleShader.setUniform("uHeight", cylinderHeight);
   // shader(exampleShader);
+}
+
+function mouseClicked() {
+  console.log("mouseClicked");
+  audioManager.audioSetup();
 }

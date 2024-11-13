@@ -11,20 +11,6 @@ class AudioManager {
     this.initialized = true;
   }
 
-  getSpectrum() {
-    if (!this.initialized) {
-      return;
-    }
-    return fft.analyze();
-  }
-
-  getBass() {
-    if (!this.initialized) {
-      return;
-    }
-    return fft.getEnergy("bass") / 255;
-  }
-
   audioDraw() {
     if (!this.initialized) {
       return;

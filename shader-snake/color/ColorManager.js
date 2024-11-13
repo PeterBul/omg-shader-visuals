@@ -40,14 +40,14 @@ class MyColorManager {
 
   /**
    * @private
-   * @type {MyAudioManager}
+   * @type {AudioManager}
    */
   audioManager;
 
   /**
    *
    * @param {number[][]} levels
-   * @param {MyAudioManager} audioManager
+   * @param {AudioManager} audioManager
    */
   constructor(levels, audioManager) {
     this.audioManager = audioManager;
@@ -149,7 +149,7 @@ class MyColorManager {
    */
   setShaderUniforms(shader) {
     // shader.setUniform("uTopLeftColor", this.tl);
-    const v = [this.audioManager.bassEnergy, 0, 0, 1];
+    const v = [this.audioManager.getBass(), 0, 0, 0.5];
     // console.log(v);
     shader.setUniform("uTopLeftColor", v);
     shader.setUniform("uTopRightColor", v);
