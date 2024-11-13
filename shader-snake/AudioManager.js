@@ -140,11 +140,14 @@ class AudioManager {
       return;
     }
     return {
-      spectrum: this.spectrum,
+      avgBassEnergy: this.avgBassEnergy,
+      avgTrebleEnergy: this.avgTrebleEnergy,
       centroid: this.centroid,
+      bassEnergy: this.bassEnergy,
       lowMidEnergy: this.lowMidEnergy,
       midEnergy: this.midEnergy,
       highMidEnergy: this.highMidEnergy,
+      spectrum: this.spectrum,
       trebleEnergy: this.trebleEnergy,
     };
   }
@@ -154,13 +157,15 @@ class AudioManager {
       return;
     }
     return {
+      avgBassEnergy: this.avgBassEnergyNormalized,
+      avgTrebleEnergy: this.avgTrebleEnergyNormalized,
       centroid: this.centroidNormalized,
+      bassEnergyNormalized: this.bassEnergyNormalized,
       lowMidEnergy: this.lowMidEnergyNormalized,
       midEnergy: this.midEnergyNormalized,
       highMidEnergy: this.highMidEnergyNormalized,
+      spectrumNormalized: this.spectrumNormalized,
       trebleEnergy: this.trebleEnergyNormalized,
-      avgBassEnergy: this.avgBassEnergyNormalized,
-      avgTrebleEnergy: this.avgTrebleEnergyNormalized,
     };
   }
 
