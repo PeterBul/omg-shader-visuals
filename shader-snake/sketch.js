@@ -96,4 +96,5 @@ function draw() {
 
 function mouseClicked() {
   audioManager.audioSetup();
+  fullscreen(true);
 }
