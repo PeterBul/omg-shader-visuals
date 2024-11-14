@@ -98,6 +98,9 @@ float psrdnoise(vec2 x, vec2 period, float alpha, out vec2 gradient)
   return 10.9*n;
 }
 
+float map(float x, float a, float b, float c, float d) {
+    return c + (x - a) * (d - c) / (b - a);
+}
 
 void main() {
     texPos = aTexCoord;
@@ -105,7 +108,7 @@ void main() {
     vec3 modifiedPos = aPosition;
     
     // Perlin noise
-    float time = uMillis / 5000.0;
+    float time = uMillis / 6000.0;
     const float scale = 2.;
     vec2 v = scale * vec2(time + aPosition.y * 0.8);
     const vec2 p = vec2(0.0);
@@ -113,7 +116,6 @@ void main() {
     vec2 g;
 
     float n = psrdnoise(v, p, alpha, g) * 1.5;
-
 
     // Normalize the position to be within the range of 0.0 to 1.0
     float t = (aPosition.y + 0.5) / len;  // Normalize y from 0 to 1
