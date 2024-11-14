@@ -9,6 +9,7 @@ class AudioManager {
    */
   bassEnergyHistory = []; // Array to store historical bassEnergy values
   trebleEnergyHistory = []; // Array to store historical bassEnergy values
+  midEnergyHistory = []; // Array to store historical bassEnergy values
   historyLength;
   initialized = false;
 
@@ -207,6 +208,19 @@ class AudioManager {
     fft.analyze();
     this.updateBassEnergyHistory();
     this.updateTrebleEnergyHistory();
+    this.updateMidEnergyHistory();
+  }
+
+  /**
+   * @private
+   */
+  updateMidEnergyHistory() {
+    this.midEnergyHistory.push(this.midEnergy);
+
+    // Limit history length
+    if (this.midEnergyHistory.length > this.historyLength) {
+      this.midEnergyHistory.shift(); // Remove oldest
+    }
   }
 
   /**
@@ -231,6 +245,16 @@ class AudioManager {
     }
   }
 
+  get avgMidEnergy() {
+    if (!this.initialized) {
+      return 0;
+    }
+    return (
+      this.midEnergyHistory.reduce((acc, val) => acc + val, 0) /
+      this.midEnergyHistory.length
+    );
+  }
+
   get avgBassEnergy() {
     if (!this.initialized) {
       return 0;
@@ -249,6 +273,13 @@ class AudioManager {
       this.trebleEnergyHistory.reduce((acc, val) => acc + val, 0) /
       this.trebleEnergyHistory.length
     );
+  }
+
+  get avgMidEnergyNormalized() {
+    if (!this.initialized) {
+      return 0;
+    }
+    return this.avgMidEnergy / 255;
   }
 
   get avgBassEnergyNormalized() {

@@ -216,21 +216,26 @@ class ColorManager {
    * @param {Shader} shader
    */
   setShaderUniforms(shader) {
-    // shader.setUniform("uTopLeftColor", this.tl);
+    // const tl = [0, 0, 0, 0.5];
+
+    // const bl = [0, 1, 1, 0.5];
+    // shader.setUniform("uTopLeftColor", tl);
+    // shader.setUniform("uTopRightColor", this.tr);
+    // shader.setUniform("uBottomLeftColor", bl);
+    // shader.setUniform("uBottomRightColor", this.br);
     const tl = [
-      this.audioManager.avgBassEnergyNormalized,
-      this.audioManager.avgBassEnergyNormalized,
       0,
+      1 - this.audioManager.avgMidEnergyNormalized * 3,
+      1 - this.audioManager.avgMidEnergyNormalized * 3,
       0.5,
     ];
 
     const bl = [
       0,
-      1 - this.audioManager.lowMidEnergyNormalized,
-      1 - this.audioManager.lowMidEnergyNormalized,
+      1 - this.audioManager.midEnergyNormalized * 3,
+      1 - this.audioManager.midEnergyNormalized * 3,
       0.5,
     ];
-    // console.log(v);
     shader.setUniform("uTopLeftColor", tl);
     shader.setUniform("uTopRightColor", this.tr);
     shader.setUniform("uBottomLeftColor", bl);
