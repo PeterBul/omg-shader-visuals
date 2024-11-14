@@ -1,3 +1,12 @@
+/**
+ * @typedef WithVisibility
+ * @prop {() => void} hide
+ * @prop {() => void} show
+ */
+
+/**
+ * @extends {WithVisibility}
+ */
 class MyColorEditor {
   /**
    * @private
@@ -16,9 +25,27 @@ class MyColorEditor {
    *
    * @param {string} color
    */
-  constructor(color) {
+  constructor(color, hide = false) {
     this.colorPicker = createColorPicker(color);
+    this.colorPicker.elt.addEventListener("mousedown", (e) => {
+      e.stopPropagation();
+    });
+
     this.alphaSlider = createSlider(0, 255, 255);
+
+    if (hide) {
+      this.hide();
+    }
+  }
+
+  hide() {
+    this.colorPicker.hide();
+    this.alphaSlider.hide();
+  }
+
+  show() {
+    this.colorPicker.show();
+    this.alphaSlider.show();
   }
 
   /**
@@ -31,6 +58,60 @@ class MyColorEditor {
     this.posY = y;
     this.colorPicker.position(x, y);
     this.alphaSlider.position(x + this.xOffsetSliderPosition, y);
+  }
+
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @returns {boolean}
+   */
+  isOnUI(x, y) {
+    return this.isOnPicker(x, y) || this.isOnSlider(x, y);
+  }
+
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @returns {boolean}
+   */
+  isOnPicker(x, y) {
+    /**
+     * @type {DOMRect}
+     */
+    const rect = this.colorPicker.elt.getBoundingClientRect();
+    return this.isOnRect(x, y, rect);
+  }
+
+  /**
+   *
+   * @param {number} x
+   * @param {number} y
+   * @returns {boolean}
+   */
+  isOnSlider(x, y) {
+    /**
+     * @type {DOMRect}
+     */
+    const rect = this.alphaSlider.elt.getBoundingClientRect();
+    return this.isOnRect(x, y, rect);
+  }
+
+  /**
+   * @private
+   * @static
+   * @param {number} x
+   * @param {number} y
+   * @param {DOMRect} rect
+   */
+  isOnRect(x, y, rect) {
+    return (
+      x > rect.x &&
+      x < rect.x + rect.width &&
+      y > rect.y &&
+      y < rect.y + rect.height
+    );
   }
 
   /**

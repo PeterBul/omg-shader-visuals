@@ -47,7 +47,27 @@ function draw() {
   orbitControl();
 }
 
-function mouseClicked() {
+let mouseDownTime = 0;
+function mousePressed() {
+  mouseDownTime = millis();
+}
+
+/**
+ * @param {MouseEvent} e
+ */
+function mouseClicked(e) {
   audioManager.audioSetup();
+  if (colorManager.isOnUI(e.clientX, e.clientY)) {
+    return;
+  }
+  if (millis() - mouseDownTime > 200) {
+    toggleFullscreen();
+  }
   fullscreen(true);
+}
+
+function keyPressed() {
+  if (key === "c") {
+    colorManager.toggleVisibility();
+  }
 }

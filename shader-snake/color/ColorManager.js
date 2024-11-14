@@ -45,17 +45,29 @@ class ColorManager {
   audioManager;
 
   /**
+   * @type {WithVisibility[]}
+   */
+  elements = [];
+
+  hidden = false;
+
+  /**
    *
    * @param {number[][]} levels
    * @param {AudioManager} audioManager
    */
-  constructor(levels, audioManager) {
+  constructor(levels, audioManager, hide = false) {
     this.audioManager = audioManager;
 
-    this.tlColorEditor = new MyColorEditor("#000000");
-    this.trColorEditor = new MyColorEditor("#ffffff");
-    this.blColorEditor = new MyColorEditor("#00ff00");
-    this.brColorEditor = new MyColorEditor("#ff00ff");
+    this.tlColorEditor = this.addColorEditor("#000000", hide);
+    this.trColorEditor = this.addColorEditor("#ffffff", hide);
+    this.blColorEditor = this.addColorEditor("#00ff00", hide);
+    this.brColorEditor = this.addColorEditor("#ff00ff", hide);
+
+    this.tlColorEditor.position(0, 0 * this.yOffsetPickerPosition);
+    this.trColorEditor.position(0, 1 * this.yOffsetPickerPosition);
+    this.blColorEditor.position(0, 2 * this.yOffsetPickerPosition);
+    this.brColorEditor.position(0, 3 * this.yOffsetPickerPosition);
 
     if (levels) {
       this.tl = levels[0];
@@ -64,15 +76,71 @@ class ColorManager {
       this.br = levels[3];
     }
 
-    this.logButton = createButton("Log Levels");
+    this.logButton = this.addButton("Log Levels", hide);
     this.logButton.size(100, 25);
     this.logButton.position(0, 4 * this.yOffsetPickerPosition);
     this.logButton.mousePressed(() => this.logLevels());
 
-    this.tlColorEditor.position(0, 0 * this.yOffsetPickerPosition);
-    this.trColorEditor.position(0, 1 * this.yOffsetPickerPosition);
-    this.blColorEditor.position(0, 2 * this.yOffsetPickerPosition);
-    this.brColorEditor.position(0, 3 * this.yOffsetPickerPosition);
+    if (hide) {
+      this.hide();
+    }
+  }
+
+  isOnUI(x, y) {
+    return this.elements.some((e) => {
+      if ("elt" in e) {
+        /**
+         * @type {HTMLElement}
+         */
+        const elt = e.elt;
+        return this.isOnRect(x, y, elt.getBoundingClientRect());
+      }
+      return e.isOnUI?.(x, y);
+    });
+  }
+
+  /**
+   *
+   * @param {string} color
+   * @param {boolean} hide
+   */
+  addColorEditor(color, hide = false) {
+    const editor = new MyColorEditor(color, hide);
+    this.elements.push(editor);
+    return editor;
+  }
+
+  /**
+   *
+   * @param {string} label
+   * @returns
+   */
+  addButton(label, hide = false) {
+    const button = createButton(label);
+    if (hide) {
+      button.hide();
+    }
+    this.elements.push(button);
+    button.addClass("atom-btn");
+    return button;
+  }
+
+  toggleVisibility() {
+    if (this.hidden) {
+      this.show();
+    } else {
+      this.hide();
+    }
+  }
+
+  show() {
+    this.hidden = false;
+    this.elements.forEach((e) => e.show());
+  }
+
+  hide() {
+    this.hidden = true;
+    this.elements.forEach((e) => e.hide());
   }
 
   /**
@@ -167,5 +235,21 @@ class ColorManager {
     shader.setUniform("uTopRightColor", this.tr);
     shader.setUniform("uBottomLeftColor", bl);
     shader.setUniform("uBottomRightColor", this.br);
+  }
+
+  /**
+   * @private
+   * @static
+   * @param {number} x
+   * @param {number} y
+   * @param {DOMRect} rect
+   */
+  isOnRect(x, y, rect) {
+    return (
+      x > rect.x &&
+      x < rect.x + rect.width &&
+      y > rect.y &&
+      y < rect.y + rect.height
+    );
   }
 }
