@@ -226,8 +226,8 @@ class ColorManager {
 
     const bl = [
       0,
-      this.audioManager.lowMidEnergyNormalized,
-      this.audioManager.lowMidEnergyNormalized,
+      1 - this.audioManager.lowMidEnergyNormalized,
+      1 - this.audioManager.lowMidEnergyNormalized,
       0.5,
     ];
     // console.log(v);
