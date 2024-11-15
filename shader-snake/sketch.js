@@ -35,13 +35,19 @@ function draw() {
   rotateX(HALF_PI - 0.5);
   background(0);
 
-  shader(snakeShader);
   const cylinderRadius = 50;
   const cylinderHeight = 500;
-  snakeShader.setUniform("uMillis", millis());
-  snakeShader.setUniform("uRadius", cylinderRadius);
-  snakeShader.setUniform("uHeight", cylinderHeight);
-  colorManager.setShaderUniforms(snakeShader);
+  const lShader = snakeShader;
+  shader(lShader);
+  // Don't touch --------------
+  lShader.setUniform("uMillis", millis());
+  lShader.setUniform("uRadius", cylinderRadius);
+  lShader.setUniform("uHeight", cylinderHeight);
+  // --------------------------
+
+  lShader.setUniform("uMorphFactor", 1);
+  lShader.setUniform("uNoiseMultiplier", 0);
+  colorManager.setShaderUniforms(lShader);
   cylinder(cylinderRadius, cylinderHeight, 150, 1000);
 
   orbitControl();

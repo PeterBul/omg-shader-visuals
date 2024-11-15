@@ -1,8 +1,10 @@
 #version 300 es
 precision mediump float;
 
-in vec2 texPos;
-in vec3 fragPos;
+in vec2 vTexPos;
+in vec3 vFragPos;
+in vec3 vPos;
+
 out vec4 colour;
 
 uniform float uMillis;
@@ -22,12 +24,12 @@ mat2 deg45Rotation = mat2(
 
 void main() {
 
-  float t = (fragPos.y + 0.5) / 1.0;  // Normalize y from 0 to 1
+  float t = (vFragPos.y + 0.5) / 1.0;  // Normalize y from 0 to 1
   // Repeating pattern
   float v = 18.52;
   float w = 10.0;
 
-  vec2 newPos = texPos * deg45Rotation;
+  vec2 newPos = vTexPos * deg45Rotation;
   if (t > 0.9) {
     // c = vec4(vec3(0.), 1.0);
     newPos = vec2(fract(newPos.x * 2. * PI * uRadius / w), fract(newPos.y * 1.1 * uHeight / w));
@@ -47,8 +49,8 @@ void main() {
   
   // c -= 0.2;
   
-  float normX = (fragPos.x + 1.) / 2.0;  // Normalize x from 0 to 1
-  float normZ = (fragPos.z + 1.) / 2.0;  // Normalize z from 0 to 1
+  float normX = (vFragPos.x + 1.) / 2.0;  // Normalize x from 0 to 1
+  float normZ = (vFragPos.z + 1.) / 2.0;  // Normalize z from 0 to 1
   if (t > 0.9 && normZ < 0.90) {
     // c = vec4(vec3(0.), 1.0);
   }
@@ -61,5 +63,7 @@ void main() {
   // vec4 col = vec4(1., 0., 0.4, 1.);
   
   // Reverse the color
+  // Removes half of the
+  // colour = c * vec4(vPos.x, 1.0);
   colour = c;
 }
