@@ -46,9 +46,11 @@ function draw() {
   // --------------------------
 
   lShader.setUniform("uMorphFactor", 1);
-  lShader.setUniform("uNoiseMultiplier", 0);
+  lShader.setUniform("uNoiseMultiplier", 0.2 + audioManager.avgTrebleEnergyNormalized*1.5);
   colorManager.setShaderUniforms(lShader);
   cylinder(cylinderRadius, cylinderHeight, 150, 1000);
+
+  console.log(audioManager.toStringNormalized)
 
   orbitControl();
 }

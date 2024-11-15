@@ -223,23 +223,39 @@ class ColorManager {
     // shader.setUniform("uTopRightColor", this.tr);
     // shader.setUniform("uBottomLeftColor", bl);
     // shader.setUniform("uBottomRightColor", this.br);
+
     const tl = [
+      0 + this.audioManager.bassEnergyNormalized - this.audioManager.avgTrebleEnergyNormalized,
+      1 - this.audioManager.avgBassEnergyNormalized,
+      1 - this.audioManager.avgTrebleEnergyNormalized * 5,
+      0.5,
+    ];
+
+    const tr = [
       0,
-      1 - this.audioManager.avgMidEnergyNormalized * 3,
-      1 - this.audioManager.avgMidEnergyNormalized * 3,
+      0 + this.audioManager.TrebleEnergyNormalized * 10 - this.audioManager.bassEnergyNormalized,
+      1,
       0.5,
     ];
 
     const bl = [
-      0,
-      1 - this.audioManager.midEnergyNormalized * 3,
-      1 - this.audioManager.midEnergyNormalized * 3,
-      0.5,
+      0.5 + this.audioManager.avgBassEnergyNormalized,
+      0 + this.audioManager.trebleEnergyNormalized * 5,
+      1 - this.audioManager.avgBassEnergyNormalized,
+      0.5 + this.audioManager.TrebleEnergyNormalized*5,
     ];
+
+    const br = [
+      0 + this.audioManager.bassEnergyNormalized,
+      0 + this.audioManager.avgTrebleEnergyNormalized * 5,
+      1 - this.audioManager.avgTrebleEnergyNormalized * 3,
+      0.5 + this.audioManager.TrebleEnergyNormalized*5,
+    ];
+
     shader.setUniform("uTopLeftColor", tl);
-    shader.setUniform("uTopRightColor", this.tr);
+    shader.setUniform("uTopRightColor", tr);
     shader.setUniform("uBottomLeftColor", bl);
-    shader.setUniform("uBottomRightColor", this.br);
+    shader.setUniform("uBottomRightColor", br);
   }
 
   /**
