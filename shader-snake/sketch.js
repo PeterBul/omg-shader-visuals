@@ -28,7 +28,7 @@ function setup() {
 
   audioManager = new AudioManager();
 
-  colorManager = new ColorManager(lightBlue1, audioManager);
+  colorManager = new ColorManager(lightBlue1, audioManager, true);
 
   noStroke();
 }
@@ -57,7 +57,7 @@ function draw() {
   colorManager.setShaderUniforms(lShader);
   cylinder(cylinderRadius, cylinderHeight, 150, 1000);
 
-  console.log(audioManager.toStringNormalized);
+  // console.log(audioManager.toStringNormalized);
 
   orbitControl();
 }
@@ -88,6 +88,6 @@ function toggleFullscreen() {
 
 function keyPressed() {
   if (key === "c") {
-    colorManager.toggleVisibility();
+    // colorManager.toggleVisibility();
   }
 }

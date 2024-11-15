@@ -60,30 +60,30 @@ class ColorManager {
     this.audioManager = audioManager;
 
     this.tlColorEditor = this.addColorEditor("#000000", hide);
-    this.trColorEditor = this.addColorEditor("#ffffff", hide);
-    this.blColorEditor = this.addColorEditor("#00ff00", hide);
-    this.brColorEditor = this.addColorEditor("#ff00ff", hide);
+    // this.trColorEditor = this.addColorEditor("#ffffff", hide);
+    // this.blColorEditor = this.addColorEditor("#00ff00", hide);
+    // this.brColorEditor = this.addColorEditor("#ff00ff", hide);
 
-    this.tlColorEditor.position(0, 0 * this.yOffsetPickerPosition);
-    this.trColorEditor.position(0, 1 * this.yOffsetPickerPosition);
-    this.blColorEditor.position(0, 2 * this.yOffsetPickerPosition);
-    this.brColorEditor.position(0, 3 * this.yOffsetPickerPosition);
+    // this.tlColorEditor.position(0, 0 * this.yOffsetPickerPosition);
+    // this.trColorEditor.position(0, 1 * this.yOffsetPickerPosition);
+    // this.blColorEditor.position(0, 2 * this.yOffsetPickerPosition);
+    // this.brColorEditor.position(0, 3 * this.yOffsetPickerPosition);
 
-    if (levels) {
-      this.tl = levels[0];
-      this.tr = levels[1];
-      this.bl = levels[2];
-      this.br = levels[3];
-    }
+    // if (levels) {
+    //   this.tl = levels[0];
+    //   this.tr = levels[1];
+    //   this.bl = levels[2];
+    //   this.br = levels[3];
+    // }
 
-    this.logButton = this.addButton("Log Levels", hide);
-    this.logButton.size(100, 25);
-    this.logButton.position(0, 4 * this.yOffsetPickerPosition);
-    this.logButton.mousePressed(() => this.logLevels());
+    // this.logButton = this.addButton("Log Levels", hide);
+    // this.logButton.size(100, 25);
+    // this.logButton.position(0, 4 * this.yOffsetPickerPosition);
+    // this.logButton.mousePressed(() => this.logLevels());
 
-    if (hide) {
-      this.hide();
-    }
+    // if (hide) {
+    //   this.hide();
+    // }
   }
 
   isOnUI(x, y) {
@@ -203,6 +203,7 @@ class ColorManager {
    * @private
    */
   logLevels() {
+    return;
     console.log([
       this.tlColorEditor.levels,
       this.trColorEditor.levels,
