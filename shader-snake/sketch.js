@@ -5,6 +5,9 @@
 /** @type {Shader} */
 let snakeShader;
 
+/** @type {Shader} */
+let noiseShader;
+
 /**
  * @type {ColorManager}
  */
@@ -12,6 +15,7 @@ let colorManager;
 
 function preload() {
   snakeShader = loadShader("snake.vert", "snake.frag");
+  noiseShader = loadShader("noise.vert", "noise.frag");
 }
 
 /**
@@ -46,11 +50,14 @@ function draw() {
   // --------------------------
 
   lShader.setUniform("uMorphFactor", 1);
-  lShader.setUniform("uNoiseMultiplier", 0.2 + audioManager.avgTrebleEnergyNormalized*1.5);
+  lShader.setUniform(
+    "uNoiseMultiplier",
+    0.2 + audioManager.avgTrebleEnergyNormalized * 1.5
+  );
   colorManager.setShaderUniforms(lShader);
   cylinder(cylinderRadius, cylinderHeight, 150, 1000);
 
-  console.log(audioManager.toStringNormalized)
+  console.log(audioManager.toStringNormalized);
 
   orbitControl();
 }
@@ -68,10 +75,15 @@ function mouseClicked(e) {
   if (colorManager.isOnUI(e.clientX, e.clientY)) {
     return;
   }
-  if (millis() - mouseDownTime > 200) {
+  if (millis() - mouseDownTime < 150) {
     toggleFullscreen();
   }
-  fullscreen(true);
+}
+
+let isFullscreen = false;
+function toggleFullscreen() {
+  isFullscreen = !isFullscreen;
+  fullscreen(isFullscreen);
 }
 
 function keyPressed() {

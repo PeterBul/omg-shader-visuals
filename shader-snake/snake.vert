@@ -1,6 +1,8 @@
 #version 300 es
 precision mediump float;
 
+#define PI 3.1415926538
+
 in vec3 aPosition;
 in vec2 aTexCoord;
 in vec3 aNormal;
@@ -188,14 +190,23 @@ float map(float x, float a, float b, float c, float d) {
     return c + (x - a) * (d - c) / (b - a);
 }
 
+float mapOrKill(float x, float a, float b, float c, float d) {
+    if (x < a || x > b) {
+        return 0.0;
+    }
+    return c + (x - a) * (d - c) / (b - a);
+}
+
 void main() {
     vTexPos = aTexCoord;
     vNormal = aNormal;
     vPos = aPosition;
+    float vNoiseMultiplier = uNoiseMultiplier;
     
     vec3 modifiedPos = aPosition;
     
-    // Perlin noise
+    // --------------------- Snake ---------------------
+    // Perlin noise for snake movement
     float time = uMillis / 6000.0;
     const float scale = 2.;
     vec2 v = scale * vec2(time + aPosition.y * 0.8);
@@ -205,7 +216,7 @@ void main() {
 
     float n = psrdnoise(v, p, alpha, g) * 1.5;
 
-// Normalize the position to be within the range of 0.0 to 1.0
+    // Normalize the position to be within the range of 0.0 to 1.0
     float t = (aPosition.y + 0.5) / len;  // Normalize y from 0 to 1
 
     // Apply a quadratic function for smooth tapering
@@ -238,34 +249,87 @@ void main() {
 
     // Pass the modified position to the fragment shader
     vFragPos = modifiedPos;
+    
+    // --------------------- Periodic effect ---------------------
+
+    // 10-minute interval in seconds
+    float intervalSec = 600.0;
+    
+    // 10-second interval for testing
+    // float intervalSec = 10.0;
+
+    float secOffset = 585.0;
+    float millisOffset = secOffset * 1000.0;
+
+    // Interval in millis
+    float interval = intervalSec * 1000.0;
+    
+    // Normalize time to [0, 1] for the 10-minute period
+    float lIntervalTime = mod(uMillis + millisOffset, interval) / interval;
+    
+    float lEdge = 0.985;
+    
+    float lEffectOn = step(lEdge, lIntervalTime);
+
+    // Not sure what happens when input is 0
+    float lMapped = mapOrKill(lIntervalTime * lEffectOn, lEdge, 1.0, 0.0, PI);
+    
+    float lBump = sin(lMapped) * lEffectOn;
+    
+    float lClippedBump = clamp(lBump * 8., 0.0, 1.0);
+    
 
     // --------------------- Cylinder to sphere ---------------------
-    // vec3 lSpherePos = aPosition;
+    vec3 lSpherePos = aPosition;
 
-    // lSpherePos.x = halfCircle2(lSpherePos.y, 0.5) * lSpherePos.x * 10.;
-    // lSpherePos.z = halfCircle2(lSpherePos.y, 0.5) * lSpherePos.z * 10.;
+    lSpherePos.x = halfCircle2(lSpherePos.y, 0.5) * lSpherePos.x * 10.;
+    lSpherePos.z = halfCircle2(lSpherePos.y, 0.5) * lSpherePos.z * 10.;
     
-    // vFragPos = lSpherePos;
+    // TODO: Reset this when finished dev
+    vFragPos = mix(vFragPos, lSpherePos, lClippedBump);
+    
+    vNoiseMultiplier *= 1.;
     
     // --------------------- Perlin noise dismorphia ---------------------
     float lTime = uMillis / 1000.0;
     
-    float noiseMultiplier = clamp((abs(vTexPos.x -  0.5) - 0.3) * 3.0, 0.0, 1.0) * uNoiseMultiplier;
+    float noiseMultiplierSnake = clamp((abs(vTexPos.x -  0.5) - 0.3) * 3.0, 0.0, 1.0) * vNoiseMultiplier;
+    float noiseMultiplierBall = clamp((abs(vTexPos.x -  0.00) - 0.00) * 3.0, 0.0, 1.0) * vNoiseMultiplier * 3.;
     if (t == 0.0 || t == 1.0) {
-        noiseMultiplier = 0.0;
+        noiseMultiplierSnake = 0.0;
     }
+    
+    float noiseMultiplier = mix(noiseMultiplierSnake, noiseMultiplierBall, lClippedBump);
+    
+
 
     vec3 lG = vec3(0.0);
     float noise = psrdnoise(vFragPos * 3., vec3(0.0), lTime, lG);
     float displacement = noise * noiseMultiplier;
-    vec3 newPosition = vFragPos + vNormal * displacement;
+    vFragPos = vFragPos + vNormal * displacement;
+    
+    
     
     // -------------------------------------------------------------------
     
+    // --------------------- Spin effect ---------------------
+     // Calculate rotation angle based on time
+    float angle = uMillis / 1000.0;
+
+    // Rotation matrix for the X-Y plane (spinning around Z-axis)
+    float cosA = cos(angle);
+    float sinA = sin(angle);
+    mat2 rotation = mat2(
+        cosA, -sinA,
+        sinA, cosA
+    );
+
+    // Apply rotation to the X and Y coordinates of the position
+    vec2 rotatedPos = rotation * vFragPos.xz;
+    vFragPos.xz = mix(vFragPos.xz, rotatedPos, lClippedBump);
     
 
 
-
     // Apply the model-view and projection transformations from p5.js
-    gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(newPosition, 1.0);
+    gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(vFragPos, 1.0);
 }

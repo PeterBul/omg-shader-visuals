@@ -225,7 +225,9 @@ class ColorManager {
     // shader.setUniform("uBottomRightColor", this.br);
 
     const tl = [
-      0 + this.audioManager.bassEnergyNormalized - this.audioManager.avgTrebleEnergyNormalized,
+      0 +
+        this.audioManager.bassEnergyNormalized -
+        this.audioManager.avgTrebleEnergyNormalized,
       1 - this.audioManager.avgBassEnergyNormalized,
       1 - this.audioManager.avgTrebleEnergyNormalized * 5,
       0.5,
@@ -233,7 +235,9 @@ class ColorManager {
 
     const tr = [
       0,
-      0 + this.audioManager.TrebleEnergyNormalized * 10 - this.audioManager.bassEnergyNormalized,
+      0 +
+        this.audioManager.TrebleEnergyNormalized * 10 -
+        this.audioManager.bassEnergyNormalized,
       1,
       0.5,
     ];
@@ -242,14 +246,14 @@ class ColorManager {
       0.5 + this.audioManager.avgBassEnergyNormalized,
       0 + this.audioManager.trebleEnergyNormalized * 5,
       1 - this.audioManager.avgBassEnergyNormalized,
-      0.5 + this.audioManager.TrebleEnergyNormalized*5,
+      0.5 + this.audioManager.TrebleEnergyNormalized * 5,
     ];
 
     const br = [
       0 + this.audioManager.bassEnergyNormalized,
       0 + this.audioManager.avgTrebleEnergyNormalized * 5,
       1 - this.audioManager.avgTrebleEnergyNormalized * 3,
-      0.5 + this.audioManager.TrebleEnergyNormalized*5,
+      0.5 + this.audioManager.TrebleEnergyNormalized * 5,
     ];
 
     shader.setUniform("uTopLeftColor", tl);
