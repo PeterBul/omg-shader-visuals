@@ -294,7 +294,7 @@ void main() {
     float lTime = uMillis / 1000.0;
     
     float noiseMultiplierSnake = clamp((abs(vTexPos.x -  0.5) - 0.3) * 3.0, 0.0, 1.0) * vNoiseMultiplier;
-    float noiseMultiplierBall = clamp((abs(vTexPos.x -  0.00) - 0.00) * 3.0, 0.0, 1.0) * vNoiseMultiplier * 3.;
+    float noiseMultiplierBall = clamp((abs(vTexPos.x -  0.00) - 0.00) * 3.0, 0.0, 1.0) * 1.;
     if (t == 0.0 || t == 1.0) {
         noiseMultiplierSnake = 0.0;
     }
