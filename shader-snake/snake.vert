@@ -258,7 +258,7 @@ void main() {
     // 10-second interval for testing
     // float intervalSec = 10.0;
 
-    float secOffset = 585.0;
+    float secOffset = 0.0;
     float millisOffset = secOffset * 1000.0;
 
     // Interval in millis
@@ -267,7 +267,7 @@ void main() {
     // Normalize time to [0, 1] for the 10-minute period
     float lIntervalTime = mod(uMillis + millisOffset, interval) / interval;
     
-    float lEdge = 0.985;
+    float lEdge = 0.980;
     
     float lEffectOn = step(lEdge, lIntervalTime);
 
@@ -285,7 +285,6 @@ void main() {
     lSpherePos.x = halfCircle2(lSpherePos.y, 0.5) * lSpherePos.x * 10.;
     lSpherePos.z = halfCircle2(lSpherePos.y, 0.5) * lSpherePos.z * 10.;
     
-    // TODO: Reset this when finished dev
     vFragPos = mix(vFragPos, lSpherePos, lClippedBump);
     
     vNoiseMultiplier *= 1.;
