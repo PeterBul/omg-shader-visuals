@@ -235,27 +235,30 @@ class ColorManager {
     ];
 
     const tr = [
-      0,
-      0 +
-        this.audioManager.TrebleEnergyNormalized * 10 -
-        this.audioManager.bassEnergyNormalized,
-      1,
-      0.5,
+      0, 0,
+      // +
+      //   this.audioManager.trebleEnergyNormalized -
+      //   this.audioManager.bassEnergyNormalized,
+      1, 0.5,
     ];
 
     const bl = [
       0.5 + this.audioManager.avgBassEnergyNormalized,
-      0 + this.audioManager.trebleEnergyNormalized * 5,
+      0,
       1 - this.audioManager.avgBassEnergyNormalized,
-      0.5 + this.audioManager.TrebleEnergyNormalized * 5,
+      // 0.5 + this.audioManager.trebleEnergyNormalized * 5,
+      0.5,
     ];
 
     const br = [
       0 + this.audioManager.bassEnergyNormalized,
       0 + this.audioManager.avgTrebleEnergyNormalized * 5,
       1 - this.audioManager.avgTrebleEnergyNormalized * 3,
-      0.5 + this.audioManager.TrebleEnergyNormalized * 5,
+      // 0.5 + this.audioManager.trebleEnergyNormalized * 5,
+      0.5,
     ];
+
+    console.log(tl, tr, bl, br);
 
     shader.setUniform("uTopLeftColor", tl);
     shader.setUniform("uTopRightColor", tr);
