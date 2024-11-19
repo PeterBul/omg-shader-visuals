@@ -276,29 +276,30 @@ void main() {
     
     float lBump = sin(lMapped) * lEffectOn;
     
-    float lClippedBump = clamp(lBump * 8., 0.0, 1.0);
+    // float lClippedBump = clamp(lBump * 8., 0.0, 1.0);
     
 
     // --------------------- Cylinder to sphere ---------------------
-    vec3 lSpherePos = aPosition;
+    // vec3 lSpherePos = aPosition;
 
-    lSpherePos.x = halfCircle2(lSpherePos.y, 0.5) * lSpherePos.x * 10.;
-    lSpherePos.z = halfCircle2(lSpherePos.y, 0.5) * lSpherePos.z * 10.;
+    // lSpherePos.x = halfCircle2(lSpherePos.y, 0.5) * lSpherePos.x * 10.;
+    // lSpherePos.z = halfCircle2(lSpherePos.y, 0.5) * lSpherePos.z * 10.;
     
-    vFragPos = mix(vFragPos, lSpherePos, lClippedBump);
+    // vFragPos = mix(vFragPos, lSpherePos, lClippedBump);
     
-    vNoiseMultiplier *= 1.;
+    // vNoiseMultiplier *= 1.;
     
     // --------------------- Perlin noise dismorphia ---------------------
     float lTime = uMillis / 1000.0;
     
     float noiseMultiplierSnake = clamp((abs(vTexPos.x -  0.5) - 0.3) * 3.0, 0.0, 1.0) * vNoiseMultiplier;
-    float noiseMultiplierBall = clamp((abs(vTexPos.x -  0.00) - 0.00) * 3.0, 0.0, 1.0) * 1.;
+    // float noiseMultiplierBall = clamp((abs(vTexPos.x -  0.00) - 0.00) * 3.0, 0.0, 1.0) * 1.;
     if (t == 0.0 || t == 1.0) {
         noiseMultiplierSnake = 0.0;
     }
     
-    float noiseMultiplier = mix(noiseMultiplierSnake, noiseMultiplierBall, lClippedBump);
+    // float noiseMultiplier = mix(noiseMultiplierSnake, noiseMultiplierBall, lClippedBump);
+    float noiseMultiplier = noiseMultiplierSnake;
     
 
 
@@ -312,20 +313,20 @@ void main() {
     // -------------------------------------------------------------------
     
     // --------------------- Spin effect ---------------------
-     // Calculate rotation angle based on time
-    float angle = uMillis / 1000.0;
+    // // Calculate rotation angle based on time
+    // float angle = uMillis / 1000.0;
 
-    // Rotation matrix for the X-Y plane (spinning around Z-axis)
-    float cosA = cos(angle);
-    float sinA = sin(angle);
-    mat2 rotation = mat2(
-        cosA, -sinA,
-        sinA, cosA
-    );
+    // // Rotation matrix for the X-Y plane (spinning around Z-axis)
+    // float cosA = cos(angle);
+    // float sinA = sin(angle);
+    // mat2 rotation = mat2(
+    //     cosA, -sinA,
+    //     sinA, cosA
+    // );
 
-    // Apply rotation to the X and Y coordinates of the position
-    vec2 rotatedPos = rotation * vFragPos.xz;
-    vFragPos.xz = mix(vFragPos.xz, rotatedPos, lClippedBump);
+    // // Apply rotation to the X and Y coordinates of the position
+    // vec2 rotatedPos = rotation * vFragPos.xz;
+    // vFragPos.xz = mix(vFragPos.xz, rotatedPos, lClippedBump);
     
 
 

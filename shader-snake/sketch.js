@@ -26,7 +26,7 @@ let audioManager;
 function setup() {
   createCanvas(1920, 1280, WEBGL);
 
-  audioManager = new AudioManager();
+  audioManager = new AudioManager(20);
 
   colorManager = new ColorManager(lightBlue1, audioManager, true);
 
